@@ -1,0 +1,19 @@
+{
+  "name": "@nice-labs/emit-file-webpack-plugin",
+  "version": "1.0.1",
+  "description": "Emit a file to output directory",
+  "repository": "https://github.com/NiceLabs/emit-file-webpack-plugin",
+  "license": "MIT",
+  "author": "septs",
+  "main": "index.js",
+  "scripts": {
+    "prepublishOnly": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3",
+    "webpack": "^5.53.0"
+  },
+  "peerDependencies": {
+    "webpack": ">= 5"
+  }
+}

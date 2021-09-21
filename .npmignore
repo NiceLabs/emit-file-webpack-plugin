@@ -1,0 +1,7 @@
+/.editorconfig
+/.prettierrc
+/.vscode
+/tsconfig.json
+!/index.d.ts
+!/index.d.ts.map
+!/index.js
