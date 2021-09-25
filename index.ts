@@ -52,6 +52,20 @@ export const emitFile = (options: Options): WebpackPluginFunction => {
   }
 }
 
+export interface JSONOptions<T> extends Omit<Options, 'content'> {
+  content: T | { toJSON(): T }
+  space?: number
+}
+
+export const emitJSONFile = <T>(options: JSONOptions<T>) => {
+  return emitFile({
+    disabled: options.disabled,
+    name: options.name,
+    content: JSON.stringify(options.content, null, options.space ?? 2),
+    stage: options.stage,
+  })
+}
+
 export default emitFile
 
 async function toSource(input: Options['content'], assets: Compilation['assets']): Promise<RawSource | null> {
