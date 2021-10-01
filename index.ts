@@ -25,7 +25,7 @@ export type Stage =
 
 export interface Options {
   disabled?: boolean
-  name: string | ((hash: Compilation['hash']) => string)
+  name: string | string[] | ((hash: Compilation['hash']) => string | string[])
   content: RawContent | ((assets: Compilation['assets']) => PromiseLike<RawContent> | RawContent)
   stage?: Stage
 }
@@ -39,9 +39,7 @@ export const emitFile = (options: Options): WebpackPluginFunction => {
       return
     }
     compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
-      const basePath = compilation.options.output.path ?? ''
-      const fileName = typeof options.name === 'function' ? options.name(compilation.hash) : options.name
-      const filePath = path.relative(basePath, path.resolve(basePath, fileName))
+      const filePath = resolveFilePath(compilation.options.output.path ?? '', options.name, compilation.hash)
       compilation.hooks.processAssets.tapPromise(tapOptions, async () => {
         const source = await toSource(options.content, compilation.assets)
         if (source !== null) {
@@ -75,4 +73,12 @@ async function toSource(input: Options['content'], assets: Compilation['assets']
     return toSource(await input(assets), assets)
   }
   return null
+}
+
+function resolveFilePath(basePath: string, name: Options['name'], hash?: string) {
+  let parts = typeof name === 'function' ? name(hash) : name
+  if (!Array.isArray(parts)) {
+    parts = [parts]
+  }
+  return path.relative(basePath, path.resolve(basePath, ...parts))
 }
