@@ -76,9 +76,10 @@ async function toSource(input: Options['content'], assets: Compilation['assets']
 }
 
 function resolveFilePath(basePath: string, name: Options['name'], hash?: string) {
-  let parts = typeof name === 'function' ? name(hash) : name
-  if (!Array.isArray(parts)) {
-    parts = [parts]
+  name = typeof name === 'function' ? name(hash) : name
+  name = Array.isArray(name) ? path.join(...name) : name
+  if (path.isAbsolute(name)) {
+    return name
   }
-  return path.relative(basePath, path.resolve(basePath, ...parts))
+  return path.relative(basePath, path.resolve(basePath, name))
 }
