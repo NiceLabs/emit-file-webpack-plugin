@@ -6,6 +6,12 @@
   "license": "MIT",
   "author": "septs",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.js"
+    }
+  },
   "scripts": {
     "prepublishOnly": "tsc"
   },
